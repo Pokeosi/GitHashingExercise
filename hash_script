@@ -1,0 +1,16 @@
+#!/usr/bin/env fish
+
+# Check if a correct input argument is provided. Firs condition checks if an input exists. Second checks if the input length is 4. Third check if the input only contains digits
+if set -q argv[1]; and string length -q -- $argv[1] -eq 4; and string match -q  '[0-9][0-9][0-9][0-9]' $argv[1]
+    set input $argv[1]
+else
+    echo "You have to input a 4 digit integer"
+    exit 1
+end
+
+# Compute the SHA-256 hash and save it to hash_output.txt.
+# First,we use echo to output the value that was inputed.
+# Using pipes, we get the output from echo command and apply sha256sum, which created the hash value for the selected integer
+# Again with pipes, we get the first value from the sha256sum command(the hash value) and use the character ">" to redirect the value on the desired file
+echo -n $input | sha256sum | awk '{print $1}' > hash_output.txt
+
